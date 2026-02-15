@@ -103,11 +103,32 @@ function addWord() {
 
 function editWord(index) {
     const newWord = prompt('Edit word:', wordBank[index]);
-    if (newWord) {
-        wordBank.splice(index, 1);
-        saveWordBank();
-        displayWordBank();
+    if (!newWord) return;
+
+    const formatted = newWord.trim().toUpperCase();
+
+    // validation: not empty
+    if (!formatted) {
+        alert('Word cannot be empty');
+        return;
     }
+
+    // validation: only A-Z
+    if (!/^[A-Z]+$/.test(formatted)) {
+        alert('Word must contain only letters A-Z');
+        return;
+    }
+
+    // validation: no duplicates (allow same word if unchanged)
+    if (wordBank.includes(formatted) && formatted !== wordBank[index]) {
+        alert('Duplicate word not allowed');
+        return;
+    }
+
+    // ✅ edit the clicked word (do not delete)
+    wordBank[index] = formatted;
+    saveWordBank();
+    displayWordBank();
 }
 
 function deleteWord(index) {
